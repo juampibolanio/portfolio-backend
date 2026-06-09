@@ -1,11 +1,16 @@
 package com.jpbolanio.portfolio_backend.technology;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
+
+import com.jpbolanio.portfolio_backend.project.Project;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,5 +34,7 @@ public class Technology {
     @Column(name = "icon_url")
     private String iconUrl;
 
-    
+    @ManyToMany(mappedBy = "technologies")
+    @Builder.Default
+    private Set<Project> projects = new HashSet<>();    
 }
