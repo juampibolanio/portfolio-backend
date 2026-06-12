@@ -27,12 +27,14 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "projects", indexes = {
     @Index(name = "idx_project_slug", columnList = "slug", unique = true)
 })
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter

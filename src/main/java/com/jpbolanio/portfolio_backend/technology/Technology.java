@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jpbolanio.portfolio_backend.project.Project;
 
 import jakarta.persistence.Column;
@@ -16,12 +17,14 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "technologies")
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class Technology {
@@ -38,5 +41,6 @@ public class Technology {
 
     @ManyToMany(mappedBy = "technologies")
     @Builder.Default
+    @JsonIgnore
     private Set<Project> projects = new HashSet<>();    
 }
