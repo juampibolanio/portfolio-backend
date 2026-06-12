@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
-    
+
     private final ProjectRepository projectRepository;
     private final TechnologyRepository technologyRepository;
 
@@ -27,12 +27,16 @@ public class ProjectService {
 
     public Project findBySlug(String slug) {
         return projectRepository.findBySlug(slug)
-                                        .orElseThrow(() -> new NotFoundException("Project not found"));
+                .orElseThrow(() -> new NotFoundException("Project not found"));
     }
 
     public Project save(ProjectRequestDto createProjectDto) {
 
-        List<Technology> foundTechnologies = technologyRepository.findAllById(createProjectDto.technologies());
+        List<Technology> foundTechnologies = new java.util.ArrayList<>();
+
+        if (createProjectDto.technologies() != null && !createProjectDto.technologies().isEmpty()) {
+            foundTechnologies = technologyRepository.findAllById(createProjectDto.technologies());
+        }
 
         Project newProject = Project.builder()
                 .title(createProjectDto.title())
