@@ -2,7 +2,6 @@ package com.jpbolanio.portfolio_backend.project;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ProjectService {
-
     private final ProjectRepository projectRepository;
     private final TechnologyRepository technologyRepository;
 
@@ -31,7 +29,6 @@ public class ProjectService {
     }
 
     public Project save(ProjectRequestDto createProjectDto) {
-
         List<Technology> foundTechnologies = new java.util.ArrayList<>();
 
         if (createProjectDto.technologies() != null && !createProjectDto.technologies().isEmpty()) {
@@ -58,11 +55,10 @@ public class ProjectService {
                             .main(mediaDto.main())
                             .project(newProject)
                             .build())
-                    .collect(Collectors.toList());
+                    .toList();
 
             newProject.setMediaFiles(mediaEntities);
         }
-
         return projectRepository.save(newProject);
     }
 }
