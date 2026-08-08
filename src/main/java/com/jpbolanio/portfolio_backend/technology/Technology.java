@@ -28,7 +28,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class Technology {
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID uuid;
