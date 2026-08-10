@@ -2,6 +2,7 @@ package com.jpbolanio.portfolio_backend.project;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -60,5 +61,12 @@ public class ProjectService {
             newProject.setMediaFiles(mediaEntities);
         }
         return projectRepository.save(newProject);
+    }
+
+    public void delete(UUID uuid) {
+        Project project = projectRepository.findById(uuid)
+                .orElseThrow(() -> new NotFoundException("Project not found"));
+
+        projectRepository.delete(project);
     }
 }
