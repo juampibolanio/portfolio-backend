@@ -36,6 +36,17 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
     }
 
+    @GetMapping("/{uuid}")
+    public ResponseEntity<Project> getByUuid(@PathVariable UUID uuid) {
+        return ResponseEntity.ok(projectService.getByUuid(uuid));
+    }
+
+    @PutMapping("/{uuid}")
+    public ResponseEntity<Project> update(@PathVariable UUID uuid, @Valid @RequestBody ProjectRequestDto dto) {
+        Project updatedProject = projectService.update(uuid, dto);
+        return ResponseEntity.ok(updatedProject);
+    }
+
     @DeleteMapping("/{uuid}")
     public ResponseEntity<Void> delete(@PathVariable UUID uuid) {
         projectService.delete(uuid);

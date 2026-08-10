@@ -2,6 +2,7 @@ package com.jpbolanio.portfolio_backend.project;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import com.jpbolanio.portfolio_backend.technology.Technology;
 import com.jpbolanio.portfolio_backend.technology.TechnologyRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -63,10 +65,52 @@ public class ProjectService {
         return projectRepository.save(newProject);
     }
 
+    @Transactional(readOnly = true)
+    public Project getByUuid(UUID uuid) {
+        return projectRepository.findById(uuid)
+                .orElseThrow(() -> new NotFoundException("Project not found with UUID: " + uuid));
+    }
+
+    @Transactional
+    public Project update(UUID uuid, ProjectRequestDto dto) {
+        Project project = getByUuid(uuid);
+
+        project.setTitle(dto.title());
+        project.setShortDescription(dto.shortDescription());
+        project.setFullDescription(dto.fullDescription());
+        project.setGithubUrl(dto.githubUrl());
+        project.setLiveUrl(dto.liveUrl());
+        project.setFeatured(dto.featured());
+
+        if (dto.technologies() != null) {
+            Set<Technology> updatedTechs = new HashSet<>(technologyRepository.findAllById(dto.technologies()));
+            project.setTechnologies(updatedTechs);
+        }
+
+        if (dto.mediafiles() != null && !dto.mediafiles().isEmpty()) {
+            project.getMediaFiles().clear();
+
+            dto.mediafiles().forEach(mediaDto -> {
+                Media media = Media.builder()
+                        .url(mediaDto.url())
+                        .mediaType(mediaDto.mediaType())
+                        .cloudinaryPublicId(mediaDto.cloudinaryPublicId())
+                        .main(mediaDto.main())
+                        .project(project)
+                        .build();
+                project.getMediaFiles().add(media);
+            });
+        }
+
+        return projectRepository.save(project);
+    }
+
     public void delete(UUID uuid) {
         Project project = projectRepository.findById(uuid)
                 .orElseThrow(() -> new NotFoundException("Project not found"));
 
         projectRepository.delete(project);
     }
+
+
 }
