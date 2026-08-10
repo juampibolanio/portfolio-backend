@@ -24,4 +24,10 @@ public class TechnologyService {
                 .build();
         return technologyRepository.save(newTech);
     }
+
+    public void delete(java.util.UUID uuid) {
+        Technology technology = technologyRepository.findById(uuid)
+                .orElseThrow(() -> new RuntimeException("Technology not found"));
+        technologyRepository.delete(technology);
+    }
 }
