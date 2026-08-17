@@ -1,6 +1,7 @@
 package com.jpbolanio.portfolio_backend.technology;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,15 @@ public class TechnologyService {
         return technologyRepository.save(newTech);
     }
 
-    public void delete(java.util.UUID uuid) {
+    public Technology update(UUID uuid, CreateTechnologyDto dto) {
+        Technology technology = technologyRepository.findById(uuid)
+                .orElseThrow(() -> new RuntimeException("Technology not found"));
+        technology.setName(dto.name());
+        technology.setIconUrl(dto.iconUrl());
+        return technologyRepository.save(technology);
+    }
+
+    public void delete(UUID uuid) {
         Technology technology = technologyRepository.findById(uuid)
                 .orElseThrow(() -> new RuntimeException("Technology not found"));
         technologyRepository.delete(technology);

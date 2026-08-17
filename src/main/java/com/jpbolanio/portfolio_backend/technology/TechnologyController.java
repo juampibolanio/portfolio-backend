@@ -1,6 +1,7 @@
 package com.jpbolanio.portfolio_backend.technology;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,11 @@ public class TechnologyController {
     @PostMapping
     public ResponseEntity<Technology> create(@Valid @RequestBody CreateTechnologyDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(technologyService.save(dto));
+    }
+
+    @PutMapping("/{uuid}")
+    public ResponseEntity<Technology> update(@PathVariable UUID uuid, @Valid @RequestBody CreateTechnologyDto dto) {
+        return ResponseEntity.ok(technologyService.update(uuid, dto));
     }
 
     @DeleteMapping("/{uuid}")
